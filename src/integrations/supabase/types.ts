@@ -14,16 +14,206 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      assessments: {
+        Row: {
+          active: boolean
+          available_from: string | null
+          available_until: string | null
+          category: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          difficulty: Database["public"]["Enums"]["difficulty_level"]
+          duration_minutes: number
+          id: string
+          practice: boolean
+          questions: Json
+          resource_links: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          available_from?: string | null
+          available_until?: string | null
+          category?: string | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          difficulty?: Database["public"]["Enums"]["difficulty_level"]
+          duration_minutes?: number
+          id?: string
+          practice?: boolean
+          questions?: Json
+          resource_links?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          available_from?: string | null
+          available_until?: string | null
+          category?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          difficulty?: Database["public"]["Enums"]["difficulty_level"]
+          duration_minutes?: number
+          id?: string
+          practice?: boolean
+          questions?: Json
+          resource_links?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          read: boolean
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string
+          read?: boolean
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          read?: boolean
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      student_assessments: {
+        Row: {
+          answers: Json | null
+          assessment_id: string
+          feedback: string | null
+          feedback_at: string | null
+          feedback_by: string | null
+          id: string
+          max_score: number | null
+          percentage: number | null
+          score: number | null
+          started_at: string
+          status: Database["public"]["Enums"]["attempt_status"]
+          student_id: string
+          submitted_at: string | null
+        }
+        Insert: {
+          answers?: Json | null
+          assessment_id: string
+          feedback?: string | null
+          feedback_at?: string | null
+          feedback_by?: string | null
+          id?: string
+          max_score?: number | null
+          percentage?: number | null
+          score?: number | null
+          started_at?: string
+          status?: Database["public"]["Enums"]["attempt_status"]
+          student_id: string
+          submitted_at?: string | null
+        }
+        Update: {
+          answers?: Json | null
+          assessment_id?: string
+          feedback?: string | null
+          feedback_at?: string | null
+          feedback_by?: string | null
+          id?: string
+          max_score?: number | null
+          percentage?: number | null
+          score?: number | null
+          started_at?: string
+          status?: Database["public"]["Enums"]["attempt_status"]
+          student_id?: string
+          submitted_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_assessments_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "student" | "educator"
+      attempt_status: "IN_PROGRESS" | "SUBMITTED"
+      difficulty_level: "EASY" | "MEDIUM" | "HARD"
+      question_type: "MULTIPLE_CHOICE" | "TRUE_FALSE" | "DESCRIPTIVE"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +340,11 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["student", "educator"],
+      attempt_status: ["IN_PROGRESS", "SUBMITTED"],
+      difficulty_level: ["EASY", "MEDIUM", "HARD"],
+      question_type: ["MULTIPLE_CHOICE", "TRUE_FALSE", "DESCRIPTIVE"],
+    },
   },
 } as const
